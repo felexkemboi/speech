@@ -16,14 +16,13 @@ from .models import *
 from .forms import *
 from django.db.models import Q
 from django.core import serializers
-# Create your views here.
+
 
 def index(request):
    request.session.flush()
 
    if request.method == "POST":
 
-        print(request.POST)
         data = request.POST.copy()
         if data['password1'] != data['password2']:
             return render(request, 'index.html', {'errors': 'Both passwords field did not match. Try again!'})
@@ -35,7 +34,8 @@ def index(request):
 
         if form.is_valid():
             instance = form.save(commit=True)
-            return render(request, 'index.html', {'message': 'You are signed Up successfully'})
+            request.session['logged_in'] = {'username': request.POST['username'], 'email': request.POST['email']}
+            return redirect('inbox')
         else:
             print(form.errors)
             return render(request, 'index.html', {'errors': form.errors})
