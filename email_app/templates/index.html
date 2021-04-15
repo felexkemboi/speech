@@ -220,7 +220,6 @@
                     function(result) {
 
                         var res = result.replace(/ /g, '').toLowerCase()
-                        alert(result)
                         $('#username').val(res)
                         responsiveVoice.speak('Your username is ' + result, 'UK English Female', {
                                 onend: function() {
