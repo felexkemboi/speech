@@ -221,6 +221,63 @@
     recognition.maxAlternatives = 1;
 
 
+
+    function addContent(recognition) {
+        responsiveVoice.speak("You want to add more?", 'UK English Female', {
+            onend: function() {
+                startListening(recognition,
+                    function() {
+                        responsiveVoice.speak('please wait a moment')
+                    },
+                    function(result) {
+                        var result = result.replace(/ /g, '').toLowerCase()
+                        if (result == "yes") {
+                            responsiveVoice.speak(("Enter the content you want to add"), 'UK English Female', {
+                                onend: function() {
+                                    startListening(recognition,
+                                        function() {
+                                            responsiveVoice.speak('please wait a moment')
+                                        },
+                                        function(result) {
+                                            var result = result.replace(/ /g, '').toLowerCase()
+                                            let originalBody = $('#message').val()
+
+                                            let newBody = originalBody + " " + result
+
+                                            $('#message').val(newBody)
+
+                                            addContent(recognition)
+                                        })
+                                }
+                            })
+
+                        } else {
+
+                            responsiveVoice.speak(("Is your email body okay for submission?"), 'UK English Female', {
+                                onend: function() {
+                                    startListening(recognition,
+                                        function() {
+                                            responsiveVoice.speak('please wait a moment')
+                                        },
+                                        function(result) {
+                                            var result = result.replace(/ /g, '').toLowerCase()
+                                            if (result == "yes") {
+                                                $("#submit").click()
+
+                                            } else {
+                                                window.location.replace('http://127.0.0.1:8000/compose/')
+                                            }
+                                        })
+                                }
+                            })
+
+                        }
+                    }
+                )
+            }
+        })
+    }
+
     responsiveVoice.speak("Enter Receiver's Email", 'UK English Female', {
         onend: function() {
             console.log("we are starting this now...."),
@@ -232,9 +289,6 @@
                     function(result) {
 
                         var res1 = result.replace(/ /g, '').toLowerCase()
-                            ///console.log(res1)
-                            //res = res1.replaceAll("at", "xyz");
-                            //console.log(res)
                         $('#to').val(res1)
                         responsiveVoice.speak('Receiver\'s email is ' + result, 'UK English Female', {
                             onend: function() {
@@ -256,12 +310,11 @@
                                                                         responsiveVoice.speak('please wait a moment')
                                                                     },
                                                                     function(result) {
-                                                                        // alert(result)
                                                                         $('#message').val(result)
                                                                         responsiveVoice.speak('Email body is ' + result, 'UK English Female', {
                                                                             onend: function() {
 
-                                                                                $("#submit").click()
+                                                                                addContent(recognition)
 
                                                                             }
                                                                         })
