@@ -10,7 +10,7 @@ urlpatterns = [
     #sign in
     path('signin/',             views.signin,        name="signin"),
 
-    
+
     path('inbox/',              views.inbox,         name="inbox"),
     path('<id>/message_view/',  views.message_view,  name="message_view"),
     path('<id>/message_view2/', views.message_view2, name="message_view2"),
